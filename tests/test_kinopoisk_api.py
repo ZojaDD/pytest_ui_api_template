@@ -10,6 +10,7 @@ load_dotenv()
 API_KEY = os.getenv('KINOPOISK_API_KEY', '1HVYC9T-QN1MV84-H5Y1BJR-80AR0XZ')
 BASE_URL = "https://api.kinopoisk.dev/"
 
+
 @pytest.fixture(scope='session')
 def api_client():
     """Фикстура для API клиента"""
@@ -20,9 +21,11 @@ def api_client():
     })
     return session
 
+
 @allure.feature("API Tests")
 @allure.title("Проверка валидности API ключа")
-@allure.description("Тест проверяет, что API ключ действителен и можно получить данные")
+@allure.description(
+    "Тест проверяет, что API ключ действителен и можно получить данные")
 def test_api_key_valid(api_client):
     """Тест проверки валидности API ключа"""
     with allure.step("Отправка запроса для проверки API ключа"):
@@ -48,7 +51,8 @@ def test_api_key_valid(api_client):
         assert response.status_code == 200, (
             f"API вернул статус {response.status_code}"
         )
-        assert "docs" in response.json(), "Ответ не содержит ключ 'docs'"
+        assert "docs" in response.json(), \
+            "Ответ не содержит ключ 'docs'"
 
     print("API ключ валиден!")
     allure.attach("API ключ валиден!", name="Result")
@@ -74,7 +78,8 @@ def test_api_search_house_domovenok_kuzya(api_client):
         )
         print(f"Status: {response.status_code}")
 
-        assert response.status_code == 200, f"Ошибка поиска: {response.status_code}"
+        assert response.status_code == 200, \
+            f"Ошибка поиска: {response.status_code}"
 
         try:
             movies = response.json().get('docs', [])
@@ -90,11 +95,14 @@ def test_api_search_house_domovenok_kuzya(api_client):
         )
 
         assert found_movie, "Не найден фильм 'Домовенок Кузя' в результатах"
-        print(f"Найден: {found_movie['name']} ({found_movie.get('year', 'N/A')})")
+        print(f"Найден: {found_movie['name']} "
+              f"({found_movie.get('year', 'N/A')})")
         allure.attach(
-            f"Найденный фильм: {found_movie['name']} ({found_movie.get('year', 'N/A')})",
+            f"Найденный фильм: {found_movie['name']} "
+            f"({found_movie.get('year', 'N/A')})",
             name="Found Movie"
         )
+
 
 @allure.feature("API Tests")
 @allure.title("Поиск высокорейтинговых фильмов")
@@ -172,7 +180,9 @@ def test_api_movies_by_year(api_client):
 
 @allure.feature("API Tests")
 @allure.title("Негативный тест: поиск фильма из 1870 года")
-@allure.description("Проверяем, что API возвращает ошибку 400 при поиске фильмов из несуществующего периода (1870 год)")
+@allure.description(
+    "Проверяем, что API возвращает ошибку 400 \
+    при поиске фильмов из несуществующего периода (1870 год)")
 def test_api_search_movie_1870_year(api_client):
     """Негативный тест поиска фильма 1870 года через API"""
     with allure.step("Выполнение поиска фильмов 1870 года"):
@@ -197,8 +207,10 @@ def test_api_search_movie_1870_year(api_client):
 
     with allure.step("Проверка статус‑кода ошибки"):
         assert response.status_code == 400, (
-            f"Ожидался статус 400 (Bad Request), но получен {response.status_code}. "
-            "Это может означать, что API не валидирует год или обрабатывает запрос иначе."
+            f"Ожидался статус 400 (Bad Request), \
+            но получен {response.status_code}. "
+            "Это может означать, что API не валидирует год \
+            или обрабатывает запрос иначе."
         )
 
     try:
@@ -212,7 +224,8 @@ def test_api_search_movie_1870_year(api_client):
         with allure.step("Проверка структуры ответа об ошибке"):
             # Проверяем наличие ключевых полей
             assert "error" in error_data or "message" in error_data, (
-                "Ответ об ошибке не содержит ожидаемых полей 'error' или 'message'"
+                "Ответ об ошибке не содержит ожидаемых полей \
+                'error' или 'message'"
             )
 
     except ValueError:
@@ -223,7 +236,8 @@ def test_api_search_movie_1870_year(api_client):
         )
         print("Предупреждение: ответ об ошибке не в формате JSON")
 
-    print("Тест пройден: API корректно возвращает статус 400 для несуществующего года")
+    print("Тест пройден: "
+          "API корректно возвращает статус 400 для несуществующего года")
 
 
 @allure.feature("API Tests")
@@ -236,7 +250,7 @@ def test_api_movie_details(api_client):
 
         # Используем известный ID фильма
         response = api_client.get(
-            f"{BASE_URL}v1.4/movie/5304528")  # Домовенок Кузя f"{BASE_URL}v1.4/movie/5304528",
+            f"{BASE_URL}v1.4/movie/5304528")
 
     with allure.step("Проверка успешности запроса"):
         assert response.status_code == 200
@@ -249,11 +263,18 @@ def test_api_movie_details(api_client):
         assert movie_data.get('year') == 2024
         assert movie_data.get('rating', {}).get('kp') >= 6.0
 
-    allure.attach(f"Название: {movie_data.get('name')}", name="Movie Details")
-    allure.attach(f"Год: {movie_data.get('year')}", name="Movie Details")
+    allure.attach(
+        f"Название: {movie_data.get('name')}",
+        name="Movie Details"
+    )
+    allure.attach(
+        f"Год: {movie_data.get('year')}",
+        name="Movie Details"
+    )
     allure.attach(
         f"Рейтинг: {movie_data.get('rating', {}).get('kp')}",
-        name="Movie Details")
+        name="Movie Details"
+    )
 
     print(f"Детали: {movie_data['name']} ({movie_data['year']})")
 

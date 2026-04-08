@@ -39,11 +39,13 @@ pytest_ui_api_template/
 ```
 
 ### Шаги
-1. **Установка зависимостей**:
+1. **Склонировать проект** 'git clone https://github.com/имя_пользователя/
+   pytest_ui_api_template.git'
+2. **Установка зависимостей**:
    ```bash
    pip install -r requirements.txt
    ```
-2. **Настройка переменных окружения**:
+3. **Настройка переменных окружения**:
    Создать файл `.env` и настроить параметры:
    ```
    # Базовые настройки
@@ -53,7 +55,7 @@ pytest_ui_api_template/
    # API ключ для Kinopoisk API
    KINOPOISK_API_KEY=
    ```
-3. **Запуск тестов**:
+4. **Запуск тестов**:
 
 **Запуск всех тестов**:
 ```bash
@@ -70,7 +72,7 @@ pytest tests/test_kinopoisk_ui.py --alluredir=allure-results
 pytest tests/test_kinopoisk_api.py --alluredir=allure-results
 ```
 
-**Просмотр отчета Allure**:
+5. **Просмотр отчета Allure**:
 ```bash
 allure serve allure-results
 ```
