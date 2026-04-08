@@ -1,12 +1,129 @@
-# Byte-compiled / optimized / DLL files
+# Создано https://www.toptal.com/developers/gitignore/api/windows,python,pycharm,test
+# Редактировать в https://www.toptal.com/developers/gitignore?templates=windows,python,pycharm,test
+
+### PyCharm ###
+# Охватывает IDE JetBrains: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm и Rider.
+# Ссылка: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+# Пользовательские настройки
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# Пользовательские настройки AWS
+.idea/**/aws.xml
+
+# Сгенерированные файлы
+.idea/**/contentModel.xml
+
+# Конфиденциальные файлы или файлы с высокой текучестью
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+
+# Gradle
+.idea/**/gradle.xml
+.idea/**/libraries
+
+# Gradle и Maven с автоматическим импортом
+# При использовании Gradle или Maven с автоимпортом следует исключить файлы модулей,
+# так как они будут создаваться заново, что может привести к сбоям. Раскомментируйте, если используете
+# автоимпорт.
+# .idea/artifacts
+# .idea/compiler.xml
+# .idea/jarRepositories.xml
+# .idea/modules.xml
+# .idea/*.iml
+# .idea/modules
+# *.iml
+# *.ipr
+
+# CMake
+cmake-build-*/
+
+# Плагин Mongo Explorer
+.idea/**/mongoSettings.xml
+
+# Формат проекта на основе файлов
+*.iws
+
+# IntelliJ
+out/
+
+# Плагин mpeltonen/sbt-idea
+.idea_modules/
+
+# Плагин JIRA
+atlassian-ide-plugin.xml
+
+# Плагин Cursive Clojure
+.idea/replstate.xml
+
+# Плагин SonarLint
+.idea/sonarlint/
+
+# Плагин Crashlytics (для Android Studio и IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# Клиент Rest на основе редактора
+.idea/httpRequests
+
+# Сериализованный файл кэша для Android Studio 3.1+
+.idea/caches/build_file_checksums.ser
+
+### Патч для PyCharm ###
+# Комментарий Причина: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
+
+# *.iml
+# modules.xml
+# .idea/misc.xml
+# *.ipr
+
+# Плагин Sonarlint
+# https://plugins.jetbrains.com/plugin/7973-sonarlint
+.idea/**/sonarlint/
+
+# Плагин SonarQube
+# https://plugins.jetbrains.com/plugin/7238-sonarqube-community-plugin
+.idea/**/sonarIssues.xml
+
+# Плагин Markdown Navigator
+# https://plugins.jetbrains.com/plugin/7896-markdown-navigator-enhanced
+.idea/**/markdown-navigator.xml
+.idea/**/markdown-navigator-enh.xml
+.idea/**/markdown-navigator/
+
+# Ошибка при создании файла кэша
+# См. https://youtrack.jetbrains.com/issue/JBR-2257
+.idea/$CACHE_FILE$
+
+# Плагин CodeStream
+# https://plugins.jetbrains.com/plugin/12206-codestream
+.idea/codestream.xml
+
+# Плагин Azure Toolkit для IntelliJ
+# https://plugins.jetbrains.com/plugin/8053-azure-toolkit-for-intellij
+.idea/**/azureSettings.xml
+
+### Python ###
+# Байтно-компилированные / оптимизированные / DLL-файлы
 __pycache__/
-*.py[codz]
+*.py[cod]
 *$py.class
 
-# C extensions
+# Расширения на языке C
 *.so
 
-# Distribution / packaging
+# Распространение / упаковка
 .Python
 build/
 develop-eggs/
@@ -27,16 +144,16 @@ share/python-wheels/
 MANIFEST
 
 # PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+# Обычно эти файлы создаются скриптом на Python на основе шаблона
+# перед тем, как PyInstaller соберет исполняемый файл, чтобы добавить в него дату и другую информацию.
 *.manifest
 *.spec
 
-# Installer logs
+# Журналы установщика
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Отчеты о модульных тестах и покрытии кода
 htmlcov/
 .tox/
 .nox/
@@ -46,29 +163,29 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
-*.py.cover
+*.py,cover
 .hypothesis/
 .pytest_cache/
 cover/
 
-# Translations
+# Переводы
 *.mo
 *.pot
 
-# Django stuff:
+# Для Django:
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-# Flask stuff:
+# Для Flask:
 instance/
 .webassets-cache
 
-# Scrapy stuff:
+# Для Scrapy:
 .scrapy
 
-# Sphinx documentation
+# Документация по Сфинксу
 docs/_build/
 
 # PyBuilder
@@ -83,60 +200,44 @@ profile_default/
 ipython_config.py
 
 # pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
+# Если вы работаете с библиотекой или пакетом, возможно, вам стоит проигнорировать эти файлы, поскольку код
+# предназначен для запуска в нескольких средах. В противном случае добавьте их в:
 # .python-version
 
 # pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
+# Согласно pypa / pipenv # 598, рекомендуется включить Pipfile .заблокировать систему управления версиями.
+# Однако, в случае совместной работы, при наличии зависимостей, зависящих от платформы, или зависимостей
+# не имея кроссплатформенной поддержки, pipenv может устанавливать зависимости, которые не работают, или нет.
+# установите все необходимые зависимости.
+#Pipfile.блокировка
 
-# UV
-#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#uv.lock
-
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
-#poetry.toml
+# поэзия
+# Аналогично Pipfile.кроме того, обычно рекомендуется включать стихи.блокировка в системе управления версиями.
+# Это особенно рекомендуется для двоичных пакетов для обеспечения воспроизводимости и чаще всего
+# обычно игнорируется для библиотек.
+# https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
+#поэзия.блокировка
 
 # pdm
-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-#   pdm recommends including project-wide configuration in pdm.toml, but excluding .pdm-python.
-#   https://pdm-project.org/en/latest/usage/project/#working-with-version-control
+# Аналогично Pipfile.lock, обычно рекомендуется включать pdm.lock в систему управления версиями.
 #pdm.lock
-#pdm.toml
-.pdm-python
-.pdm-build/
+# pdm хранит общесистемные конфигурации в файле .pdm.toml, но рекомендуется не включать его
+# в систему контроля версий.
+# https://pdm.fming.dev/#use-with-ide
+.pdm.toml
 
-# pixi
-#   Similar to Pipfile.lock, it is generally recommended to include pixi.lock in version control.
-#pixi.lock
-#   Pixi creates a virtual environment in the .pixi directory, just like venv module creates one
-#   in the .venv directory. It is recommended not to include this directory in version control.
-.pixi
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
+# PEP 582; используется, например, в github.com/David-OConnor/pyflow и github.com/pdm-project/pdm
 __pypackages__/
 
-# Celery stuff
+# Файлы Celery
 celerybeat-schedule
 celerybeat.pid
 
-# SageMath parsed files
+# Файлы, обработанные SageMath
 *.sage.py
 
-# Environments
+# Среды
 .env
-.envrc
 .venv
 env/
 venv/
@@ -144,14 +245,14 @@ ENV/
 env.bak/
 venv.bak/
 
-# Spyder project settings
+# Настройки проекта Spyder
 .spyderproject
 .spyproject
 
-# Rope project settings
+# Настройки проекта Rope
 .ropeproject
 
-# mkdocs documentation
+# Документация mkdocs
 /site
 
 # mypy
@@ -159,49 +260,136 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
-# Pyre type checker
+# Средство проверки типов Pyre
 .pyre/
 
-# pytype static type analyzer
+# Статический анализатор типов pytype
 .pytype/
 
-# Cython debug symbols
+# Отладочные символы Cython
 cython_debug/
 
 # PyCharm
-#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#  and can be added to the global gitignore or merged into this file.  For a more nuclear
-#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
+# Специальный шаблон JetBrains хранится в отдельном файле JetBrains.gitignore, который можно
+# можно найти по адресу https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
+# и добавить в глобальный файл gitignore или объединить с этим файлом. Для более радикального
+# варианта (не рекомендуется) можно раскомментировать следующую строку, чтобы игнорировать всю папку с идеями.
 #.idea/
 
-# Abstra
-# Abstra is an AI-powered process automation framework.
-# Ignore directories containing user credentials, local state, and settings.
-# Learn more at https://abstra.io/docs
-.abstra/
+### Патч для Python ###
+# Файл локальной конфигурации Poetry — https://python-poetry.org/docs/configuration/#local-configuration
+poetry.toml
 
-# Visual Studio Code
-#  Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore 
-#  that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
-#  and can be added to the global gitignore or merged into this file. However, if you prefer, 
-#  you could uncomment the following to ignore the entire vscode folder
-# .vscode/
-
-# Ruff stuff:
+# ruff
 .ruff_cache/
 
-# PyPI configuration file
-.pypirc
+# Файлы конфигурации LSP
+pyrightconfig.json
 
-# Cursor
-#  Cursor is an AI-powered code editor. `.cursorignore` specifies files/directories to
-#  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
-#  refer to https://docs.cursor.com/context/ignore-files
-.cursorignore
-.cursorindexingignore
+### Тестировать ###
+### Игнорировать все файлы, которые могут быть использованы для тестирования вашего кода, и
+### вы бы не хотели нажимать
 
-# Marimo
-marimo/_static/
-marimo/_lsp/
-__marimo__/
+# Ссылка https://en.wikipedia.org/wiki/Metasyntactic_variable
+
+# Самые распространенные
+* foo
+* bar
+* fubar
+* foobar
+* база
+
+# Менее распространенный
+*qux
+* кукс
+*бонго
+*базола
+*ztesch
+
+# Великобритания, Австралия
+* колебание
+*колебание
+* колебание
+*флоб
+*бляп
+*бла
+*буп
+*бип
+
+# Японский
+*hoge
+*пийо
+*fuga
+* хогера
+*хогехоге
+
+# Португалия, Испания
+*фулано
+*сикрано
+*бельтрано
+*менгано
+*перенгано
+*зутано
+
+# Франция, Италия, Нидерланды
+*тото
+*тити
+*тата
+*туту
+*пиппо
+*плуто
+*паперрино
+*аап
+*нут
+*миес
+
+# Другие подходящие названия
+*тесты
+*тесты_каталог
+*тесты_файл
+*тесты_файлы
+*test
+* testdir
+*testfile
+* testfiles
+* тестирование
+* testingdir
+* testingfile
+* testingfiles
+* temp
+* tempdir
+* tempfile
+* временные файлы
+*tmp
+* tmpdir
+* tmpfile
+* tmpfiles
+* lol
+
+### Windows ###
+# Файлы кэша миниатюр Windows
+Большие пальцы.db
+Thumbs.db: можно зашифровать
+ehthumbs.db
+ehthumbs_vista.db
+
+# Файл дампа
+*.stackdump
+
+# Файл конфигурации папки
+[Dd]esktop.ini
+
+# Корзина, используемая в общих файловых ресурсах
+$RECYCLE.BIN/
+
+# Файлы установщика Windows
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Ярлыки Windows
+*.lnk
+
+# Конец https://www.toptal.com/developers/gitignore/api/windows,python,pycharm,test
