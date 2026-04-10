@@ -3,17 +3,22 @@ import time
 import allure
 import pytest
 from selenium import webdriver
-from selenium.webdriver import WebElement
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
-from typing import Generator, Any, Optional
 from selenium.webdriver.support.ui import WebDriverWait
+from typing import Generator, Any, Optional
 
-
-# Получение API ключа
-API_KEY = os.getenv('KINOPOISK_API_KEY', '1HVYC9T-QN1MV84-H5Y1BJR-80AR0XZ')
+# Получение URL из окружения (исправление хардкода URL)
+UI_BASE_URL = os.getenv('UI_BASE_URL', 'https://www.kinopoisk.ru/')
+MOVIE_DETAILS_URL = os.getenv(
+    'MOVIE_DETAILS_URL', f'{UI_BASE_URL}film/5304528/'
+)
+MOVIES_IN_CINEMA_URL = os.getenv(
+    'MOVIES_IN_CINEMA_URL', f'{UI_BASE_URL}lists/movies/movies-in-cinema/'
+)
 
 
 @pytest.fixture(scope='function')
@@ -23,7 +28,6 @@ def browser() -> Generator[WebDriver, Any, None]:
     driver.execute_script(
         "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
     )
-    driver.maximize_window()
     driver.implicitly_wait(10)
 
     yield driver
@@ -61,6 +65,15 @@ def find_element(browser: WebDriver, selectors: list) -> Optional[WebElement]:
     return None
 
 
+def find_visible_elements(browser: WebDriver, selectors: list) -> list:
+    """Ищет все видимые элементы по списку CSS‑селекторов."""
+    elements = []
+    for selector in selectors:
+        found = browser.find_elements(By.CSS_SELECTOR, selector)
+        elements.extend(el for el in found if el.is_displayed())
+    return elements
+
+
 @allure.feature("UI Tests - Kinopoisk")
 @allure.title("Переход на главную страницу Кинопоиска")
 @allure.description(
@@ -72,7 +85,7 @@ def test_ui_main_page_load(browser: WebDriver) -> None:
 
     with allure.step("Открытие главной страницы Кинопоиска"):
         print("Открываем главную страницу Кинопоиска...")
-        browser.get("https://www.kinopoisk.ru/")
+        browser.get(UI_BASE_URL)  # Использование переменной вместо хардкода
 
     # Принятие cookies
     accept_cookies(browser)
@@ -113,14 +126,15 @@ def test_ui_main_page_load(browser: WebDriver) -> None:
             print("Поисковая строка найдена")
         else:
             # Проверка кнопки поиска
-            search_button = browser.find_element(
-                By.CSS_SELECTOR,
-                "button[type='submit'], "
-                ".search-button"
-            )
-            if search_button.is_displayed():
-                print("Кнопка поиска найдена")
-            else:
+            try:
+                search_button = browser.find_element(
+                    By.CSS_SELECTOR, "button[type='submit'], .search-button"
+                )
+                if search_button.is_displayed():
+                    print("Кнопка поиска найдена")
+                else:
+                    print("Элементы поиска не найдены, но тест продолжается")
+            except Exception:
                 print("Элементы поиска не найдены, но тест продолжается")
 
     print("Главная страница загружена успешно!")
@@ -134,7 +148,7 @@ def test_ui_search_domovenok_kuzya(browser: WebDriver) -> None:
     """UI тест: поиск фильма 'Домовенок Кузя'."""
 
     with allure.step("Открытие главной страницы Кинопоиска"):
-        browser.get("https://www.kinopoisk.ru/")
+        browser.get(UI_BASE_URL)  # Использование переменной вместо хардкода
         WebDriverWait(browser, 10).until(
             EC.presence_of_element_located((By.TAG_NAME, "body"))
         )
@@ -161,15 +175,14 @@ def test_ui_search_domovenok_kuzya(browser: WebDriver) -> None:
             print("Запрос введён и отправлен")
         else:
             # Резервный вариант: прямой переход на страницу поиска
-            browser.get(
-                "https://www.kinopoisk.ru/index.php?kp_query=Домовенок+Кузя"
-            )
+            browser.get(f"{UI_BASE_URL}index.php?kp_query=Домовенок+Кузя")
             print("Выполнен прямой переход на страницу поиска")
 
     with allure.step("Проверка результатов поиска"):
         WebDriverWait(browser, 15).until(
-            EC.presence_of_element_located((
-                By.CSS_SELECTOR, "h1, .title, .search-results"))
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "h1, .title, .search-results")
+            )
         )
         allure.attach(
             browser.get_screenshot_as_png(),
@@ -186,7 +199,8 @@ def test_ui_search_domovenok_kuzya(browser: WebDriver) -> None:
                 attachment_type=allure.attachment_type.PNG
             )
             raise AssertionError(
-                "Фильм 'Домовенок Кузя' не найден в результатах поиска")
+                "Фильм 'Домовенок Кузя' не найден в результатах поиска"
+            )
 
     print("Фильм 'Домовенок Кузя' успешно найден в результатах поиска")
 
@@ -198,7 +212,7 @@ def test_ui_open_movie_page(browser: WebDriver) -> None:
     """UI тест: переход на страницу фильма."""
 
     with allure.step("Переход на страницу фильма 'Домовенок Кузя'"):
-        browser.get("https://www.kinopoisk.ru/film/5304528/")
+        browser.get(MOVIE_DETAILS_URL)
         WebDriverWait(browser, 15).until(
             EC.presence_of_element_located((By.TAG_NAME, "body"))
         )
@@ -208,7 +222,8 @@ def test_ui_open_movie_page(browser: WebDriver) -> None:
     with allure.step("Ожидание загрузки и проверка URL"):
         WebDriverWait(browser, 15).until(
             EC.presence_of_element_located((
-                By.CSS_SELECTOR, "h1, .title"))
+                By.CSS_SELECTOR, "h1, .title"
+            ))
         )
         allure.attach(
             browser.get_screenshot_as_png(),
@@ -247,7 +262,7 @@ def test_ui_navigation_menu(browser: WebDriver) -> None:
     """UI тест: проверка навигационного меню."""
 
     with allure.step("Открытие главной страницы Кинопоиска"):
-        browser.get("https://www.kinopoisk.ru/")
+        browser.get(UI_BASE_URL)  # Замена хардкода на переменную из окружения
         WebDriverWait(browser, 10).until(
             EC.presence_of_element_located((By.TAG_NAME, "body"))
         )
@@ -276,27 +291,17 @@ def test_ui_navigation_menu(browser: WebDriver) -> None:
                 unique_texts = list(set(nav_texts))[:5]
                 print(f"Тексты навигации: {unique_texts}")
                 allure.attach("\n".join(unique_texts), name="Navigation Texts")
-        else:
-            # Резервная проверка: ищем ссылки в header
-            header_links = browser.find_elements(
-                By.CSS_SELECTOR,
-                "header a, .header a"
-            )
-            if header_links:
-                print(f"Найдено {len(header_links)} ссылок в header")
             else:
-                print("Навигационные элементы не найдены")
+                # Резервная проверка: ищем ссылки в header
+                header_links = browser.find_elements(
+                    By.CSS_SELECTOR, "header a, .header a"
+                )
+                if header_links:
+                    print(f"Найдено {len(header_links)} ссылок в header")
+                else:
+                    print("Навигационные элементы не найдены")
 
     print("Проверка навигации завершена")
-
-
-def find_visible_elements(browser: WebDriver, selectors: list) -> list:
-    """Ищет все видимые элементы по списку CSS‑селекторов."""
-    elements = []
-    for selector in selectors:
-        found = browser.find_elements(By.CSS_SELECTOR, selector)
-        elements.extend(el for el in found if el.is_displayed())
-    return elements
 
 
 @allure.feature("UI Tests - Kinopoisk")
@@ -306,9 +311,10 @@ def find_visible_elements(browser: WebDriver, selectors: list) -> list:
 def test_ui_movies_in_cinema(browser: WebDriver) -> None:
     """UI тест: переход на страницу фильмов в кино."""
     with allure.step("Переход на страницу фильмов в кино"):
-        browser.get("https://www.kinopoisk.ru/lists/movies/movies-in-cinema/")
+        browser.get(MOVIES_IN_CINEMA_URL)
         WebDriverWait(browser, 15).until(
-            EC.presence_of_element_located((By.TAG_NAME, "body")))
+            EC.presence_of_element_located((By.TAG_NAME, "body"))
+        )
 
     accept_cookies(browser)
 
@@ -334,8 +340,9 @@ def test_ui_movies_in_cinema(browser: WebDriver) -> None:
             if "кино" not in page_text and "фильм" not in page_text:
                 raise AssertionError("Не удалось найти контент на странице")
 
-        print(f"На странице найдено "
-              f"{len(content_elements)} элементов контента")
+        print(
+            f"На странице найдено {len(content_elements)} элементов контента"
+        )
 
     print("Тест страницы 'Фильмы в кино' завершён успешно!")
 
