@@ -10,6 +10,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from typing import Generator, Any, Optional
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Получение URL из окружения (исправление хардкода URL)
 UI_BASE_URL = os.getenv('UI_BASE_URL', 'https://www.kinopoisk.ru/')
