@@ -11,7 +11,6 @@ API_KEY = os.getenv('KINOPOISK_API_KEY', '1HVYC9T-QN1MV84-H5Y1BJR-80AR0XZ')
 BASE_URL = os.getenv('API_BASE_URL', 'https://api.kinopoisk.dev/')
 
 
-
 @pytest.fixture(scope='session')
 def api_client():
     """Фикстура для API клиента"""
@@ -23,10 +22,10 @@ def api_client():
     return session
 
 
-
 @allure.feature('API Tests')
 @allure.title('Проверка валидности API ключа')
-@allure.description('Тест проверяет, что API ключ действителен и можно получить данные')
+@allure.description(
+    'Тест проверяет, что API ключ действителен и можно получить данные')
 def test_api_key_valid(api_client):
     """Тест проверки валидности API ключа"""
     with allure.step('Отправка запроса для проверки API ключа'):
@@ -50,13 +49,13 @@ def test_api_key_valid(api_client):
     print(f'Response: {response.text[:200]}...')
 
     with allure.step('Проверка статус кода и структуры ответа'):
-        assert response.status_code == 200, f'API вернул статус {response.status_code}'
+        assert response.status_code == 200, \
+            f'API вернул статус {response.status_code}'
         response_json = response.json()
         assert 'docs' in response_json, 'Ответ не содержит ключ "docs"'
 
     print('API ключ валиден!')
     allure.attach('API ключ валиден!', name='Result')
-
 
 
 @allure.feature('API Tests')
@@ -79,7 +78,8 @@ def test_api_search_house_domovenok_kuzya(api_client):
         )
         print(f'Status: {response.status_code}')
 
-        assert response.status_code == 200, f'Ошибка поиска: {response.status_code}'
+        assert response.status_code == 200, \
+            f'Ошибка поиска: {response.status_code}'
 
         movies = response.json().get('docs', [])
 
@@ -92,12 +92,13 @@ def test_api_search_house_domovenok_kuzya(api_client):
         )
 
         assert found_movie, 'Не найден фильм "Домовенок Кузя" в результатах'
-        print(f'Найден: {found_movie["name"]} ({found_movie.get("year", "N/A")})')
+        print(f'Найден: {found_movie["name"]} '
+              f'({found_movie.get("year", "N/A")})')
         allure.attach(
-            f'Найденный фильм: {found_movie["name"]} ({found_movie.get("year", "N/A")})',
+            f'Найденный фильм: {found_movie["name"]} '
+            f'({found_movie.get("year", "N/A")})',
             name='Found Movie'
         )
-
 
 
 @allure.feature('API Tests')
@@ -107,7 +108,6 @@ def test_api_high_rated_movies(api_client):
     """Тест высокорейтинговых фильмов через API"""
     with allure.step('Поиск фильмов с высоким рейтингом'):
         print('Ищем фильмы с высоким рейтингом...')
-
 
         response = api_client.get(
             f'{BASE_URL}v1.4/movie',
@@ -134,8 +134,8 @@ def test_api_high_rated_movies(api_client):
         rating = movie.get('rating', {}).get('kp', 0)
         movie_ratings.append(f'{movie.get("name")}: {rating}')
         with allure.step(f'Проверка рейтинга фильма {movie.get("name")}'):
-            assert rating >= 8.0, f'Фильм {movie.get("name")} имеет рейтинг {rating} < 8.0'
-
+            assert rating >= 8.0, \
+                f'Фильм {movie.get("name")} имеет рейтинг {rating} < 8.0'
 
     allure.attach('\n'.join(movie_ratings), name='Movies with ratings ≥ 8.0')
     print(f'Найдено {len(movies)} фильмов с рейтингом ≥ 8.0')
@@ -149,7 +149,6 @@ def test_api_movies_by_year(api_client):
     with allure.step('Поиск фильмов 2025 года'):
         print('Ищем фильмы 2025 года...')
 
-
         response = api_client.get(
             f'{BASE_URL}v1.4/movie',
             params={'year': '2025', 'limit': 5}
@@ -157,7 +156,6 @@ def test_api_movies_by_year(api_client):
 
     with allure.step('Проверка успешности запроса'):
         assert response.status_code == 200
-
 
     data = response.json()
     movies = data.get('docs', [])
@@ -169,18 +167,16 @@ def test_api_movies_by_year(api_client):
     movie_list = []
     for movie in movies:
         movie_list.append(f'{movie.get("name")} ({movie.get("year")})')
-        with allure.step(f'Проверка года выпуска {movie.get("name")}'):  # <-- Исправлено: скобка закрыта, двоеточие снаружи
-            assert movie.get('year') == 2025, f'Фильм {movie.get("name")} не 2025 года'
+        with (allure.step(f'Проверка года выпуска {movie.get("name")}')):
+            assert movie.get('year') == 2025, \
+                f'Фильм {movie.get("name")} не 2025 года'
     allure.attach('\n'.join(movie_list), name='Movies from 2025')
     print(f'Найдено {len(movies)} фильмов 2025 года')
-
 
 
 @allure.feature('API Tests')
 @allure.title('Поиск фильмов по году')
 @allure.description('Проверяем поиск фильмов 2025 года')
-
-
 def test_api_search_movie_1870_year(api_client):
     """Негативный тест поиска фильма 1870 года через API"""
     with allure.step('Выполнение поиска фильмов 1870 года'):
@@ -227,7 +223,7 @@ def test_api_search_movie_1870_year(api_client):
                 'В ответе об ошибке отсутствует описание ошибки'
             )
     except ValueError:
-        # Если ответ не JSON (например, HTML‑страница ошибки), прикрепляем как текст
+        # Если ответ не JSON, прикрепляем как текст
         allure.attach(
             response.text,
             name='Non-JSON Response',
@@ -241,13 +237,21 @@ def test_api_search_movie_1870_year(api_client):
             data = response.json()
             movies = data.get('docs', [])
             assert len(movies) == 0, (
-                'При поиске фильмов 1870 года найдены результаты, хотя их быть не должно'
+                'При поиске фильмов 1870 года найдены результаты, \
+                хотя их быть не должно'
             )
-            print('Фильмы 1870 года не найдены (пустой список в ответе 200 OK)')
+            print(
+                'Фильмы 1870 года не найдены (пустой список в ответе 200 OK)'
+            )
         else:
-            print(f'Получен ожидаемый статус ошибки {response.status_code} — тест пройден')
+            print(
+                f'Получен ожидаемый статус ошибки {response.status_code} '
+                f'— тест пройден'
+            )
 
-    allure.attach('Тест успешно подтвердил отсутствие фильмов 1870 года', name='Result')
+    allure.attach(
+        'Тест успешно подтвердил отсутствие фильмов 1870 года',
+        name='Result')
     print('Негативный тест пройден успешно!')
 
 
