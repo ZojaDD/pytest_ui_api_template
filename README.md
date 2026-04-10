@@ -47,9 +47,11 @@ pytest_ui_api_template/
    Создать файл `.env` и настроить параметры:
    ```
    # Базовые настройки
-   API_BASE_URL=https://api.kinopoisk.dev/
-   UI_BASE_URL=https://www.kinopoisk.ru/
-   TIMEOUT=30
+    API_BASE_URL=https://api.kinopoisk.dev/
+    UI_BASE_URL=https://www.kinopoisk.ru/
+    MOVIE_DETAILS_URL=https://www.kinopoisk.ru/film/5304528/
+    MOVIES_IN_CINEMA_URL=https://www.kinopoisk.ru/lists/movies/movies-in-cinema/
+    TIMEOUT=30
 
    # API ключ для Kinopoisk API
    KINOPOISK_API_KEY=1HVYC9T-QN1MV84-H5Y1BJR-80AR0XZ
