@@ -47,33 +47,35 @@ pytest_ui_api_template/
    Создать файл `.env` и настроить параметры:
    ```
    # Базовые настройки
-   BASE_URL=https://www.kinopoisk.ru/
+   API_BASE_URL=https://api.kinopoisk.dev/
+   UI_BASE_URL=https://www.kinopoisk.ru/
    TIMEOUT=30
 
    # API ключ для Kinopoisk API
-   KINOPOISK_API_KEY=
-   ```
+   KINOPOISK_API_KEY=1HVYC9T-QN1MV84-H5Y1BJR-80AR0XZ
+   ``` 
 3. **Запуск тестов**:
 
 **Запуск всех тестов**:
 ```bash
-pytest tests/ --alluredir=allure-results
+pytest --testing-type=all -v -s --alluredir=allure-results
 ```
 
 **Запуск только UI-тестов**:
 ```bash
-pytest tests/test_kinopoisk_ui.py --alluredir=allure-results
+pytest --testing-type=ui -v -s --alluredir=allure-results
 ```
 
 **Запуск только API-тестов**:
 ```bash
-pytest tests/test_kinopoisk_api.py --alluredir=allure-results
+pytest --testing-type=api -v -s --alluredir=allure-results
 ```
 
 **Просмотр отчета Allure**:
 ```bash
 allure serve allure-results
 ```
+
 
 ## Охват тестирования
 
