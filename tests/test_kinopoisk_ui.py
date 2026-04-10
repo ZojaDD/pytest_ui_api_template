@@ -85,7 +85,7 @@ def test_ui_main_page_load(browser: WebDriver) -> None:
 
     with allure.step("Открытие главной страницы Кинопоиска"):
         print("Открываем главную страницу Кинопоиска...")
-        browser.get(UI_BASE_URL)  # Использование переменной вместо хардкода
+        browser.get(UI_BASE_URL)
 
     # Принятие cookies
     accept_cookies(browser)
@@ -148,7 +148,7 @@ def test_ui_search_domovenok_kuzya(browser: WebDriver) -> None:
     """UI тест: поиск фильма 'Домовенок Кузя'."""
 
     with allure.step("Открытие главной страницы Кинопоиска"):
-        browser.get(UI_BASE_URL)  # Использование переменной вместо хардкода
+        browser.get(UI_BASE_URL)
         WebDriverWait(browser, 10).until(
             EC.presence_of_element_located((By.TAG_NAME, "body"))
         )
@@ -262,7 +262,7 @@ def test_ui_navigation_menu(browser: WebDriver) -> None:
     """UI тест: проверка навигационного меню."""
 
     with allure.step("Открытие главной страницы Кинопоиска"):
-        browser.get(UI_BASE_URL)  # Замена хардкода на переменную из окружения
+        browser.get(UI_BASE_URL)
         WebDriverWait(browser, 10).until(
             EC.presence_of_element_located((By.TAG_NAME, "body"))
         )
