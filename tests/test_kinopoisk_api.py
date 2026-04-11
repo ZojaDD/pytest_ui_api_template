@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Получение API ключа
-API_KEY = os.getenv('KINOPOISK_API_KEY', '1HVYC9T-QN1MV84-H5Y1BJR-80AR0XZ')
-BASE_URL = os.getenv('API_BASE_URL', 'https://api.kinopoisk.dev/')
+API_KEY = os.getenv('KINOPOISK_API_KEY')
+BASE_URL = os.getenv('API_BASE_URL')
 
 
 @pytest.fixture(scope='session')
