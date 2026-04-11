@@ -15,13 +15,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Получение URL из окружения (исправление хардкода URL)
-UI_BASE_URL = os.getenv('UI_BASE_URL', 'https://www.kinopoisk.ru/')
-MOVIE_DETAILS_URL = os.getenv(
-    'MOVIE_DETAILS_URL', f'{UI_BASE_URL}film/5304528/'
-)
-MOVIES_IN_CINEMA_URL = os.getenv(
-    'MOVIES_IN_CINEMA_URL', f'{UI_BASE_URL}lists/movies/movies-in-cinema/'
-)
+UI_BASE_URL = os.getenv('UI_BASE_URL')
+MOVIE_DETAILS_URL = os.getenv('MOVIE_DETAILS_URL')
+MOVIES_IN_CINEMA_URL = os.getenv('MOVIES_IN_CINEMA_URL')
 
 
 @pytest.fixture(scope='function')
